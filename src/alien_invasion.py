@@ -12,8 +12,6 @@ class AlienInvasion:
         """Initialize the game, and create game resources.  """
         pygame.init()
         
-        
-        
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         
