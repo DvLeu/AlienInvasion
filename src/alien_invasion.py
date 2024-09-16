@@ -50,7 +50,7 @@ class AlienInvasion:
         self.ship.blitme()
         
         pygame.display.flip()
-        
+        #240 ANTES DE MOVING BOTH LEFT AND RIGHT 
                     
 if __name__ == '__main__':
     #?Make a game instance, and run the game. 
