@@ -39,8 +39,6 @@ class AlienInvasion:
                 self._update_screen()
                 self.clock.tick(60)
                 
-                
-                
     def _check_events(self):
         """Respond to keypresses and mouse events. """
         for event in pygame.event.get():
@@ -61,7 +59,6 @@ class AlienInvasion:
                 sys.exit()
             elif event.key == pygame.K_SPACE:
                 self._fire_bullet()
-
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group"""
