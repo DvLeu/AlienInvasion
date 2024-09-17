@@ -29,16 +29,19 @@ class AlienInvasion:
             while True:
                 self._check_events()
                 self.ship.update()
-                self.bullets.update()
-                #? Get rig of bullets that have disappeared.
-                for bullet in self.bullets.copy():
-                    if bullet.rect.bottom <= 0:
-                        self.bullets.remove(bullet)
                 print(len(self.bullets))
-
+                self._update_bullets()
                 self._update_screen()
                 self.clock.tick(60)
                 
+
+    def _update_bullets(self):
+        self.bullets.update()
+        #? Get rig of bullets that have disappeared.
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
     def _check_events(self):
         """Respond to keypresses and mouse events. """
         for event in pygame.event.get():
