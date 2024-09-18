@@ -32,21 +32,25 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+        self.game_active = True
     
     def _ship_hit(self):
         """Respond to the ship being hit by an alien """
-        #? Decrement ships_left
-        self.stats.ships_left -= 1
+        if self.stats.ships_left > 0:
+            #? Decrement ships_left
+            self.stats.ships_left -= 1
         
-        #Get rid of any remaining bullets and aliens.
-        self.bullets.empty()
-        self.aliens.empty()
+            #Get rid of any remaining bullets and aliens.
+            self.bullets.empty()
+            self.aliens.empty()
 
-        #Create a new fleet and center the skip
-        self._create_fleet()
-        self.ship.center_ship()
-        #Pause
-        sleep(0.5)
+            #Create a new fleet and center the skip
+            self._create_fleet()
+            self.ship.center_ship()
+            #Pause
+            sleep(0.5)
+        else:
+            self.game_active = False
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -124,8 +128,12 @@ class AlienInvasion:
         #?Look for alien-ship collisions
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             print("Ship hit!!! ")
+            self._ship_hit()
+        
+        self._check_aliens_bottom()
 
     def _create_fleet(self):
+
         """Create the fleet of aliens."""
         # Create an alien and keep adding aliens until there's no room left.
         # Spacing between aliens is one alien width and one alien height.
@@ -141,6 +149,14 @@ class AlienInvasion:
             # Finished a row; reset x value, and increment y value.
             current_x = alien_width
             current_y += 2 * alien_height
+
+    def _check_aliens_bottom(self):
+        """Check if any aliens have reached the bottom of the screen. """
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= self.settings.screen_height:
+                #Treat this the same as if the ship got hit.
+                self._ship_hit()
+                break
 
     def _create_alien(self, x_position, y_position):
         """Create an alien and place it in the fleet."""
