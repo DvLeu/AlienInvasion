@@ -53,6 +53,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -82,17 +83,37 @@ class AlienInvasion:
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play. """
-        if self.play_button.rect.collidepoint(mouse_pos):
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.game_active:
+            #? Reset the game settings.
+            self.settings.initialize_dynamic_settings()
+            
+            #? Reset the game statistics
+            self.stats.reset_stats()
             self.game_active = True
+            
+            #?Get rid of any remaining bullets and aliens
+            self.bullets.empty()
+            self.aliens.empty()
+
+            #? Create a new a fleet and center the ship.
+            self._create_fleet()
+            self.ship.center_ship()
+
+            #? Hide the mouse cursor
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
+        
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        
         elif event.key == pygame.K_q:
             sys.exit()
+        
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()            
 
@@ -100,6 +121,7 @@ class AlienInvasion:
         """Respond to key releases."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
+        
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
@@ -131,6 +153,7 @@ class AlienInvasion:
             #?Destroy existing bullets and create new fleet.
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """Update the positions of all aliens in the fleet."""
