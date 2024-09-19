@@ -1,7 +1,7 @@
 import pygame 
 
 from pygame.sprite import Sprite
-
+from pathlib import Path
 
 class Alien(Sprite):
     """A class to represent a single alien in the fleet."""
@@ -11,9 +11,11 @@ class Alien(Sprite):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-
-        # Load the alien image and set its rect attribute.
-        self.image = pygame.image.load(r'src\Images\alien.bmp')
+        #? Multiplatform Images
+        curren_directory = Path(__file__).parent
+        image_path = curren_directory / 'Images' / 'alien.bmp'
+        # Load the alien image and set its rect attribute.  
+        self.image = pygame.image.load(str(image_path))
         self.rect = self.image.get_rect()
 
         # Start each new alien near the top left of the screen.
